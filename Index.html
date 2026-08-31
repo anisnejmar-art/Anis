@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Premium Landing</title>
+    <!-- Подключаем шрифты: Inter для простого текста и Playfair Display для дорогого заголовка -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* БАЗОВЫЕ НАСТРОЙКИ И ЦВЕТА (Взяты прямо со скриншота) */
+        :root {
+            --bg-color: #262626; /* Тот самый мягкий темно-серый */
+            --bg-darker: #1e1e1e;
+            --accent-green: #d2ff3a; /* Лаймовый неон */
+            --accent-hover: #bced18;
+            --text-main: #ffffff;
+            --text-muted: #9e9e9e;
+            --border-color: rgba(255, 255, 255, 0.15);
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 1. ПОЛОСА АНОНСА (САМЫЙ ВЕРХ) */
+        .announcement-bar {
+            background-color: #333333;
+            color: #d1d1d1;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .announcement-bar a {
+            color: var(--text-main);
+            text-decoration: underline;
+            margin-left: 10px;
+        }
+
+        /* 2. НАВИГАЦИЯ */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: var(--bg-color);
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-links a i { font-size: 0.7rem; }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .header-actions a { color: var(--text-main); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+        .btn-get-started {
+            background-color: var(--accent-green);
+            color: #000 !important;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600 !important;
+            transition: 0.3s;
+        }
+        .btn-get-started:hover { background-color: var(--accent-hover); }
+
+        /* 3. ГЛАВНЫЙ ЭКРАН (HERO) */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(3.5rem, 6vw, 5.5rem);
+            font-weight: 500;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            max-width: 900px;
+            margin-bottom: 25px;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: #d1d1d1;
+            max-width: 650px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+        .btn-primary {
+            background-color: var(--accent-green);
+            color: #000;
+            padding: 15px 35px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            border: 1px solid var(--accent-green);
+        }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            padding: 15px 35px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+        }
+        .btn-secondary:hover { border-color: var(--text-main); }
+
+        /* 4. БЕГУЩАЯ СТРОКА С ЛОГОТИПАМИ */
+        .trust-bar {
+            width: 100%;
+            overflow: hidden;
+            padding: 20px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        /* Градиент по краям для плавного исчезновения */
+        .trust-bar::before, .trust-bar::after {
+            content: "";
+            position: absolute; top: 0; width: 150px; height: 100%; z-index: 2;
+        }
+        .trust-bar::before { left: 0; background: linear-gradient(to right, var(--bg-color) 0%, transparent 100%); }
+        .trust-bar::after { right: 0; background: linear-gradient(to left, var(--bg-color) 0%, transparent 100%); }
+        
+        .logos-slide {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            animation: slide 30s linear infinite;
+            white-space: nowrap;
+        }
+        .logos-slide span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        @keyframes slide {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* 5. КРУПНОЕ ИЗОБРАЖЕНИЕ С ПАРЯЩЕЙ КАРТОЧКОЙ */
+        .hero-visual {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 700px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .hero-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            /* Затемняем низ картинки, чтобы сливалось с фоном */
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        }
+
+        /* Та самая парящая карточка из скриншота */
+        .floating-ui {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 400px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .ui-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .ui-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-green);
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            font-size: 1.2rem;
+        }
+        .ui-header-text { display: flex; flex-direction: column; text-align: left; }
+        .ui-small { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .ui-main { font-size: 1rem; font-weight: 600; color: var(--text-main); }
+
+        .ui-list {
+            list-style: none;
+            text-align: left;
+        }
+        .ui-list li {
+            padding: 12px 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .ui-list li:last-child { border-bottom: none; }
+        .ui-list li:hover, .ui-list li.active { color: var(--text-main); font-weight: 500; }
+        .ui-list li.active::before {
+            content: "→";
+            color: var(--accent-green);
+            margin-right: 8px;
+        }
+
+        /* Адаптивность для телефона */
+        @media (max-width: 900px) {
+            header { padding: 15px 20px; }
+            .nav-links, .header-actions a:not(.btn-get-started) { display: none; } /* Прячем меню */
+            .hero { padding-top: 50px; }
+            .hero-buttons { flex-direction: column; width: 100%; padding: 0 20px; }
+            .btn-primary, .btn-secondary { width: 100%; }
+            .floating-ui { width: 90%; }
+            .hero-visual { height: 500px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Верхняя полоса анонса -->
+    <div class="announcement-bar">
+        One Platform, One Goal: Transforming Customer Data into Customer Joy. <a href="#">Read announcement</a>
+    </div>
+
+    <!-- Шапка (Навигация) -->
+    <header>
+        <div class="logo-area">
+            <i class="fa-solid fa-layer-group"></i>
+            mParticle
+        </div>
+        <div class="nav-links">
+            <a href="#">Platform <i class="fa-solid fa-chevron-down"></i></a>
+            <a href="#">Solutions <i class="fa-solid fa-chevron-down"></i></a>
+            <a href="#">Resources <i class="fa-solid fa-chevron-down"></i></a>
+            <a href="#">Customers</a>
+        </div>
+        <div class="header-actions">
+            <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+            <a href="#">Login</a>
+            <a href="#">Contact</a>
+            <a href="#" class="btn-get-started">Get started</a>
+        </div>
+    </header>
+
+    <!-- Главный экран -->
+    <section class="hero">
+        <h1>Turn customer data into customer joy.</h1>
+        <p>mParticle is the choice for multi-channel consumer brands who want to deliver intelligent and adaptive customer experiences in the moments that matter, across any screen or device.</p>
+        
+        <div class="hero-buttons">
+            <a href="#" class="btn-primary">Explore demo</a>
+            <a href="#" class="btn-secondary">Contact us</a>
+        </div>
+
+        <!-- Бегущая строка доверия (Логотипы) -->
+        <div class="trust-bar">
+            <div class="logos-slide">
+                <!-- Оригинальный набор + дубликат для бесконечной прокрутки -->
+                <span>ChowNow</span>
+                <span>INSPIRE</span>
+                <span><i class="fa-solid fa-burger"></i> BurgerBrand</span>
+                <span>JOE & THE JUICE</span>
+                <span>max</span>
+                <span>jetBlue</span>
+                <span>MARLEY SPOON</span>
+                
+                <!-- Дубликат -->
+                <span>ChowNow</span>
+                <span>INSPIRE</span>
+                <span><i class="fa-solid fa-burger"></i> BurgerBrand</span>
+                <span>JOE & THE JUICE</span>
+                <span>max</span>
+                <span>jetBlue</span>
+                <span>MARLEY SPOON</span>
+            </div>
+        </div>
+
+        <!-- Визуальная часть с фото и парящей карточкой -->
+        <div class="hero-visual">
+            <!-- Драматичное темное фото профиля, похожее на оригинал -->
+            <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=1400&auto=format&fit=crop" alt="Customer Profile">
+            
+            <!-- Парящий UI элемент (Glassmorphism) -->
+            <div class="floating-ui">
+                <div class="ui-header">
+                    <div class="ui-icon">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <div class="ui-header-text">
+                        <span class="ui-small">I want to</span>
+                        <span class="ui-main">Upsell users with personalized offers</span>
+                    </div>
+                </div>
+                <ul class="ui-list">
+                    <li class="active">Offer discounts at the right time</li>
+                    <li>Send a personalized message on any channel</li>
+                    <li>Display a paywall at the right time</li>
+                    <li>Convert anonymous users to known</li>
+                    <li>Customize a Next Best Action</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
